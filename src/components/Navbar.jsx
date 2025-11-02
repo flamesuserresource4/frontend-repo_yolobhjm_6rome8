@@ -1,6 +1,19 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
+  const navLinks = (
+    <>
+      <a href="#academics" className="block px-3 py-2 text-gray-700 hover:text-gray-900 transition-colors">Academics</a>
+      <a href="#life" className="block px-3 py-2 text-gray-700 hover:text-gray-900 transition-colors">Campus Life</a>
+      <a href="#admissions" className="block px-3 py-2 text-gray-700 hover:text-gray-900 transition-colors">Admissions</a>
+      <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-gray-900 transition-colors">Contact</a>
+    </>
+  );
+
   return (
     <motion.header
       initial={{ y: -40, opacity: 0 }}
@@ -15,14 +28,39 @@ export default function Navbar() {
               <span className="inline-block h-8 w-8 rounded-lg bg-red-500/90" />
               <span className="text-lg font-semibold tracking-tight">Aarav International School</span>
             </a>
-            <nav className="hidden md:flex items-center gap-6 text-sm">
-              <a href="#academics" className="text-gray-700 hover:text-gray-900 transition-colors">Academics</a>
-              <a href="#life" className="text-gray-700 hover:text-gray-900 transition-colors">Campus Life</a>
-              <a href="#admissions" className="text-gray-700 hover:text-gray-900 transition-colors">Admissions</a>
-              <a href="#contact" className="text-gray-700 hover:text-gray-900 transition-colors">Contact</a>
+
+            <nav className="hidden md:flex items-center gap-2 text-sm">
+              {navLinks}
             </nav>
-            <a href="#admissions" className="ml-4 inline-flex items-center rounded-xl bg-red-600 px-4 py-2 text-white shadow-sm hover:bg-red-700 transition-colors text-sm">Apply Now</a>
+
+            <div className="flex items-center gap-3">
+              <a href="#admissions" className="hidden sm:inline-flex items-center rounded-xl bg-red-600 px-4 py-2 text-white shadow-sm hover:bg-red-700 transition-colors text-sm">Apply Now</a>
+              <button
+                aria-label="Toggle menu"
+                onClick={() => setOpen((v) => !v)}
+                className="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-700 hover:bg-white/80"
+              >
+                {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="md:hidden border-t border-white/40"
+              >
+                <div className="px-4 py-2">
+                  {navLinks}
+                  <a href="#admissions" className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-red-600 px-4 py-2 text-white shadow-sm hover:bg-red-700 transition-colors text-sm">Apply Now</a>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.header>
